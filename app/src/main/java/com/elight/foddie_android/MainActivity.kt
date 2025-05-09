@@ -2,6 +2,7 @@ package com.elight.foddie_android
 
 import android.animation.ObjectAnimator
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.OvershootInterpolator
 import androidx.activity.ComponentActivity
@@ -16,14 +17,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.elight.foddie_android.data.FoodApi
 import com.elight.foddie_android.ui.theme.FoddieandroidTheme
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     var showSpashscreen = true;
+
+    @Inject
+    lateinit var foodApi: FoodApi
+
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen().apply {
             setKeepOnScreenCondition{
@@ -71,6 +80,10 @@ class MainActivity : ComponentActivity() {
                     )
                 }
             }
+        }
+
+        if(::foodApi.isInitialized){
+            Log.d("MainActivity", "FoodApi is initialized")
         }
 
         CoroutineScope(Dispatchers.IO).launch {
